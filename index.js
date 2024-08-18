@@ -1,249 +1,303 @@
-// Завдання 1
+// Task 1
 /**
- * Функція `checkData` перевіряє наявність даних.
- * У випадку помилки, викликається помилка з причиною (cause).
+ * The `checkData` function checks for the presence of data.
+ * In case of an error, an error with a cause is thrown.
  *
- *  data - вхідні дані.
+ *  data - input data.
  */
 function checkData(data) {
-  // Якщо об'єкт не пустий повертаємо дані
-  // Інакше створюємо помилку,в якості тексту помилки ми використовуємо рядок "Об'єкт пустий".
-  // Якщо виникла помилка, повертаємо її повідомлення.
+  try {
+    if (Object.keys(data).length) {
+      return data;
+    } else {
+      throw new Error("The object is empty");
+    }
+  } catch (error) {
+    return error.message;
+  }
 }
 
-console.log("Завдання: 1 ==============================");
+console.log("Task: 1 ==============================");
 
 console.log(checkData({}));
-// Виведе Об'єкт пустий
+// Outputs: The object is empty
 console.log(checkData({ name: "John", age: 30, city: "New York" }));
-// Виведе { name: 'John', age: 30, city: 'New York' }
+// Outputs: { name: 'John', age: 30, city: 'New York' }
 
-// Завдання 2
+// Task 2
 /**
- * Функція `parseJson` намагається аналізувати вхідний JSON-рядок.
- * Якщо рядок має невірний формат, генерується помилка з відповідним текстом.
+ * The `parseJson` function attempts to parse the input JSON string.
+ * If the string has an incorrect format, an error with the corresponding message is thrown.
  *
- *  jsonStr - JSON-рядок для аналізу.
+ *  jsonStr - JSON string to parse.
  */
 function parseJson(jsonStr) {
-  // Спроба розпарсити JSON-рядок.
-  // Якщо рядок має невірний формат, виникне помилка, яку ми обробляємо у блоку catch.
-  // Повертаємо отриманий об'єкт
-  // Якщо виникла помилка, повертаємо її повідомлення.
+  try {
+    let data = JSON.parse(jsonStr);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
 }
-console.log("Завдання: 2 ==============================");
+console.log("Task: 2 ==============================");
 
-// Вхідний JSON-рядок з правильним форматом.
+// Input JSON string with the correct format.
 let validJson = '{"name":"John","age":30,"city":"New York"}';
-// Вхідний JSON-рядок з неправильним форматом.
-let invalidJson = '{"name":"John,"age":30,"city":"New York"}'; // Пропущена закриваюча лапка після "John".
+// Input JSON string with an incorrect format.
+let invalidJson = '{"name":"John,"age":30,"city":"New York"}'; // Missing closing quote after "John".
 
-// Спробуємо аналізувати JSON-рядки.
+// Attempt to parse the JSON strings.
 console.log(parseJson(validJson));
-// Виведе { name: 'John', age: 30, city: 'New York' }
+// Outputs: { name: 'John', age: 30, city: 'New York' }
 console.log(parseJson(invalidJson));
-// Виведе Unexpected token a in JSON at position 15
+// Outputs: Unexpected token a in JSON at position 15
 
-// Завдання 3
+// Task 3
 
 /**
- * Функція `getAge` отримує вік користувача.
- * Якщо вік користувача менше 0, генерується помилка з відповідним текстом.
+ * The `getAge` function retrieves the user's age.
+ * If the user's age is less than 0, an error with the corresponding message is thrown.
  *
- *  age - вік користувача.
+ *  age - the user's age.
  */
 function getAge(age) {
-  // Спроба отримати вік користувача.
-  // Якщо вік менше 0, виникне помилка, яку ми обробляємо у блоку catch.
-  // Генеруємо помилку, якщо вік менше 0 з повідомленням Вік не може бути менше 0!.
-  // До помилки дадаємо властивість name зі значенням "AgeError"
-  // Викидаємо помилку
-  // Якщо помилки не має повертаємо рядок `Вік користувача: ${age}`
-  // Якщо виникла помилка, повертаємо об'єкт з name та message помилки.
+  try {
+    if (age > 0) {
+      return `User's age: ${age}`;
+    } else {
+      const error = new Error("Age cannot be less than 0!");
+      error.name = "AgeError";
+      throw error;
+    }
+  } catch (error) {
+    return { error: error.message, name: error.name };
+  }
 }
-console.log("Завдання: 3 ==============================");
+console.log("Task: 3 ==============================");
 
-// Виклик функції з від'ємним віком.
+// Call the function with a negative age.
 console.log(getAge(-1));
-// Виведе { error: 'Вік не може бути менше 0!', name: 'AgeError' }
-// Виклик функції з віком 20.
+// Outputs: { error: 'Age cannot be less than 0!', name: 'AgeError' }
+// Call the function with age 20.
 console.log(getAge(20));
-// Виведе Вік користувача: 20
+// Outputs: User's age: 20
 
-// Завдання 4
+// Task 4
 /**
- * Функція `getBookById` отримує книгу за її ID.
- * Якщо книги з таким ID не існує, генерується TypeError.
+ * The `getBookById` function retrieves a book by its ID.
+ * If a book with that ID does not exist, a TypeError is thrown.
  *
- *  books - масив книг.
- *  id - ID книги.
+ *  books - array of books.
+ *  id - book ID.
  */
 function getBookById(books, id) {
-  // Спроба знайти книгу по ID та записати в змінну book.
-  // Якщо книга не знайдена, генерується TypeError з повідомленням Книга з ID ${id} не знайдена!.
-  // Повертаємо book
-  // Повертаємо текстове представлення помилки
+  try {
+    let book = books.find((book) => book.id === id);
+    if (!book) {
+      throw new TypeError(`Book with ID ${id} not found!`);
+    }
+    return `Book: ${book.title}`;
+  } catch (error) {
+    return error.toString();
+  }
 }
-console.log("Завдання: 4 ==============================");
+console.log("Task: 4 ==============================");
 
-// Виклик функції з неіснуючим ID.
+// Call the function with a non-existent ID.
 
 console.log(
   getBookById(
     [
-      { id: 1, title: "Книга 1" },
-      { id: 2, title: "Книга 2" },
+      { id: 1, title: "Book 1" },
+      { id: 2, title: "Book 2" },
     ],
     3
   )
 );
-// Виведе TypeError: Книга з ID 3 не знайдена!
+// Outputs: TypeError: Book with ID 3 not found!
 console.log(
   getBookById(
     [
-      { id: 1, title: "Книга 1" },
-      { id: 2, title: "Книга 2" },
+      { id: 1, title: "Book 1" },
+      { id: 2, title: "Book 2" },
     ],
     2
   )
 );
-// Виведе Книга: Книга 2
+// Outputs: Book: Book 2
 
-// Завдання 5
+// Task 5
 
 /**
- * Функція `decodeURIComponentWrapper` виконує декодування рядка `encodedString`
- * з використанням функції `decodeURIComponent`. Якщо сталася помилка URIError,
- * вона перехоплюється та виводиться повідомлення про помилку.
+ * The `decodeURIComponentWrapper` function decodes the string `encodedString`
+ * using the `decodeURIComponent` function. If a URIError occurs,
+ * it is caught and an error message is displayed.
  *
- *  encodedString - Рядок для декодування.
+ *  encodedString - The string to decode.
  */
 function decodeURIComponentWrapper(encodedString) {
-  // Спроба декодувати рядок
-  // Повертаємо декодований рядок
-  // Якщо виникла помилка, і ії назва дорівнює URIError повертаємо помилку про неправильний URI формат з повідомленням Помилка декодування URI,
-  //  інкше повертаємо текстове представлення помилки
+  try {
+    const decodedString = decodeURIComponent(encodedString);
+    return decodedString;
+  } catch (error) {
+    if (error.name === "URIError") {
+      return new URIError("URI decoding error");
+    } else {
+      return new Error(error.toString());
+    }
+  }
 }
 
-console.log("Завдання: 5 ==============================");
+console.log("Task: 5 ==============================");
 
-console.log(decodeURIComponentWrapper("Hello%20World")); // виведе 'Hello World'
-console.log(decodeURIComponentWrapper("%E0%A4%A")); // виведе інформацію про помилку URIError
+console.log(decodeURIComponentWrapper("Hello%20World")); // Outputs: 'Hello World'
+console.log(decodeURIComponentWrapper("%E0%A4%A")); // Outputs information about a URIError
 
-// Завдання 6
+// Task 6
 /**
- * Функція `findEvenNumber` знаходить перше число, що ділиться на 2 без остачі в масиві.
- * Якщо такого числа немає, вона кидає помилку.
+ * The `findEvenNumber` function finds the first number divisible by 2 in the array.
+ * If no such number exists, it throws an error.
  *
- *  numbers - Масив чисел для пошуку.
+ *  numbers - Array of numbers to search.
  */
 function findEvenNumber(numbers) {
-  // Створюємо змінну evenNumber без значення
-  // Шукаємо перше число, що ділиться на 2 без остачі, та записуємо в нашу змінну.
-  // Якщо такого числа немає, кидаємо помилку з повідомлення У масиві немає чисел, що діляться на 2 без остачі!.
-  // Якщо число знайдено повертаємо його
-  // Виводимо текстове представлення помилки.
-  // Незалежно від результату, виводимо вихідний масив.
+  let evenNumber;
+  try {
+    evenNumber = numbers.find((number) => number % 2 === 0);
+    if (evenNumber === undefined) {
+      throw new Error("No numbers divisible by 2 in the array!");
+    }
+    return evenNumber;
+  } catch (error) {
+    return error.toString();
+  } finally {
+    console.log(numbers);
+  }
 }
 
-console.log("Завдання: 6 ==============================");
-// Виклик функції з масивом чисел.
+console.log("Task: 6 ==============================");
+// Call the function with an array of numbers.
 console.log(findEvenNumber([1, 3, 5]));
-// Виведе
+// Outputs
 // [ 1, 3, 5 ]
-// Error: У масиві немає чисел, що діляться на 2 без остачі!;
+// Error: No numbers divisible by 2 in the array!;
 console.log(findEvenNumber([1, 4, 5]));
-// Виведе
+// Outputs
 // [ 1, 4, 5 ]
 // 4
 
-// Завдання 7
+// Task 7
 /**
- * Функція `validateUser` перевіряє об'єкт користувача на відповідність заданим вимогам.
- * Якщо об'єкт користувача не відповідає вимогам, вона кидає помилку з причиною (cause).
+ * The `validateUser` function checks the user object for compliance with specified requirements.
+ * If the user object does not meet the requirements, it throws an error with a cause.
  *
- *  user - Об'єкт користувача для перевірки.
+ *  user - The user object to check.
  */
 function validateUser(user) {
-  // Перевіряємо, чи існує об'єкт користувача,якщо ні викидуємо помилку з повідомленням "Об'єкт користувача не вказано!".
-  // Перевіряємо, чи існує ім'я користувача,якщо ні викидуємо помилку з повідомленням "Ім'я користувача не вказано!", а як причину вказуємо об'єкт user.
-  // Перевіряємо, чи існує email користувача,якщо ні викидуємо помилку з повідомленням "Email користувача не вказано!", а як причину вказуємо об'єкт user.
-  // Якщо всі перевірки пройдено успішно виводимо повідомлення "Об'єкт користувача відповідає всім вимогам."
-  // Виводимо повідомлення про помилку та причину помилки.
+  try {
+    if (!user) {
+      throw new Error("User object not specified!");
+    }
+    if (!user.name) {
+      throw new Error("User name not specified!", { cause: user });
+    }
+    if (!user.email) {
+      throw new Error("User email not specified!", { cause: user });
+    }
+    console.log("The user object meets all requirements.");
+  } catch (error) {
+    console.error(error.message, error.cause);
+  }
 }
 
-console.log("Завдання: 7 ==============================");
+console.log("Task: 7 ==============================");
 
-// Виклик функції з неповним об'єктом користувача.
+// Call the function with an incomplete user object.
 validateUser({ name: "John Doe" });
-// Виведе
-// Email користувача не вказано! { name: 'John Doe' }
+// Outputs
+// User email not specified! { name: 'John Doe' }
 
-// Завдання 8
+// Task 8
 /**
- * Функція `calculateSquareRoot` обчислює квадратний корінь з числа.
- * Якщо аргумент не є числом, вона кидає TypeError.
- * Якщо число від'ємне, вона кидає RangeError.
+ * The `calculateSquareRoot` function calculates the square root of a number.
+ * If the argument is not a number, it throws a TypeError.
+ * If the number is negative, it throws a RangeError.
  *
- *  number - Число для обчислення квадратного кореня.
+ *  number - The number to calculate the square root for.
  */
 function calculateSquareRoot(number) {
-  // Перевіряємо, чи аргумент є числом, якщо ні викидуємо помилку про невірний тип даних з повідомленням Аргумент має бути числом!".
-  // Перевіряємо, чи число не від'ємне, якщо ні викидуємо помилку про тип недопустимий діапазон з повідомленням Число не повинно бути від'ємним!".
-  // Повертаємо корінь квадратний з вхідного значення
-  // Повертаємо повідомлення про помилку.
+  try {
+    if (typeof number !== "number") {
+      throw new TypeError("Argument must be a number!");
+    }
+    if (number < 0) {
+      throw new RangeError("Number must not be negative!");
+    }
+    return Math.sqrt(number);
+  } catch (error) {
+    return error.message;
+  }
 }
 
-console.log("Завдання: 8 ==============================");
+console.log("Task: 8 ==============================");
 
 console.log(calculateSquareRoot(9));
-// Виведе 3
+// Outputs: 3
 console.log(calculateSquareRoot(-9));
-// Виведе Число не повинно бути від'ємним!
+// Outputs: Number must not be negative!
 console.log(calculateSquareRoot("abc"));
-// Виведе Аргумент має бути числом!
+// Outputs: Argument must be a number!
 
-// Завдання 9
+// Task 9
 
 /**
- * Функція `processData` обробляє масив чисел.
- * Якщо в масиві є не число, вона кидає TypeError.
+ * The `processData` function processes an array of numbers.
+ * If there is a non-number in the array, it throws a TypeError.
  *
- *  data - Масив чисел для обробки.
+ *  data - Array of numbers to process.
  */
 function processData(data) {
-  // Для кожного елемента в масиві
-  // Перевіряємо, чи елемент є числом
-  // Якщо елемент не є числом, кидаємо помилку невірного типу даних з повідомленням `Елемент з індексом ${index} має бути числом!`
-  // Повертаємо рядок "Дані успішно оброблені"
-  // Виводимо stack trace помилки
-  // Повертаємо повідомлення помилки
+  try {
+    for (let i = 0; i < data.length; i++) {
+      if (typeof data[i] !== "number") {
+        throw new TypeError(`Element at index ${i} must be a number!`);
+      }
+    }
+    return "Data successfully processed";
+  } catch (error) {
+    console.error(error.stack);
+    return error.message;
+  }
 }
 
-console.log("Завдання: 9 ==============================");
+console.log("Task: 9 ==============================");
 
-// Викликаємо функцію з правильними даними
+// Call the function with correct data
 console.log(processData([1, 2, 3]));
-// Виведе Дані успішно оброблені
+// Outputs: Data successfully processed
 
-// Викликаємо функцію з неправильними даними
+// Call the function with incorrect data
 console.log(processData([1, "two", 3]));
-// Виведе Елемент з індексом 1 має бути числом!
+// Outputs: Element at index 1 must be a number!
 
-// Завдання 10
+// Task 10
 /**
- * Функція `evaluateExpression` обчислює результат математичного виразу, переданого у вигляді рядка.
- * Використовується функція `eval` для обчислення виразу. Якщо виникає помилка EvalError,
- * вона перехоплюється та виводиться повідомлення про помилку.
+ * The `evaluateExpression` function calculates the result of a mathematical expression passed as a string.
+ * The `eval` function is used to evaluate the expression. If an EvalError occurs,
+ * it is caught and an error message is displayed.
  *
- *  expression - Математичний вираз у вигляді рядка.
+ *  expression - Mathematical expression as a string.
  */
 function evaluateExpression(expression) {
-  // Повертаємо результат розрахунку
-  // Якщо була виявлена помилка повертаємо помилку при виконанні функції eval
+  try {
+    const result = eval(expression);
+    return result;
+  } catch (error) {
+    return new EvalError(error.message);
+  }
 }
 
-console.log("Завдання: 10 ==============================");
+console.log("Task: 10 ==============================");
 
-console.log(evaluateExpression("2 + 2")); // виведе 4
-console.log(evaluateExpression("10 / hello")); // виведе EvalError: hello is not defined та інформацію про помилку
+console.log(evaluateExpression("2 + 2")); // Outputs: 4
+console.log(evaluateExpression("10 / hello")); // Outputs: EvalError: hello is not defined and error information
